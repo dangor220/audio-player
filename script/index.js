@@ -8,16 +8,28 @@ let playNum = 0;
 
 const arrMusic = [
   [
-    "./assets/audio/beyonce.mp3",
-    "Beyonce",
-    "Don't Hurt Yourself",
-    "./assets/img/lemonade.png",
+    "./assets/audio/Nirvana — Polly.mp3",
+    "Nirvana",
+    "Polly",
+    "./assets/img/kurtjpg.jpg",
+  ],
+  [
+    "./assets/audio/Marvin Gaye - Let's Get It On.mp3",
+    "Marvin Gaye",
+    "Let's Get It On",
+    "./assets/img/mavin.jpg",
   ],
   [
     "./assets/audio/dontstartnow.mp3",
     "Dua Lipa",
     "Don't Start Now",
     "./assets/img/dontstartnow.png",
+  ],
+  [
+    "./assets/audio/beyonce.mp3",
+    "Beyonce",
+    "Don't Hurt Yourself",
+    "./assets/img/lemonade.png",
   ],
 ];
 
