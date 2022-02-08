@@ -12,7 +12,6 @@ body {
 
 .main {
   height: 100vh;
-  background-image: url("./assets/img/lemonade.png");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -49,7 +48,6 @@ body {
   box-shadow: 0 0 20px #000;
 }
 .wrapper__image {
-  background-image: url("./assets/img/lemonade.png");
   background-repeat: no-repeat;
   background-size: 101%;
   background-position: center;
@@ -95,7 +93,7 @@ body {
 .prev {
   background-image: url("../assets/svg/play.png");
   background-position: center;
-  background-size: cover;
+  background-size: 100%;
   background-color: transparent;
   background-repeat: no-repeat;
   margin-left: 15px;
@@ -179,4 +177,48 @@ body {
 }
 .time__end {
   color: rgb(193, 255, 6);
+}
+
+.volume__container {
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+  width: 38px;
+}
+.volume-button {
+  display: flex;
+  width: 70px;
+  height: 80px;
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+
+.volume-slider {
+  position: absolute;
+  bottom: 50px;
+  right: 0;
+  z-index: 3;
+  width: 20px;
+  height: 0;
+  transform: rotate(0.5turn);
+  background: white;
+  box-shadow: 0 0 20px #000a;
+  transition: 0.5s;
+}
+
+.volume-slider.active__volume {
+  height: 90px;
+}
+
+.volume-percentage {
+  background: rgb(193, 255, 6);
+  width: 100%;
+  height: 65%;
+  position: relative;
+}
+.icono-volumeMedium {
+  width: 70px;
+  height: 50px;
+  background-image: url("../assets/img/volume.png");
+  background-size: cover;
 }

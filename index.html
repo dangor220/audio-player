@@ -4,12 +4,8 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>audioplayer</title>
-    <link
-      rel="shortcut icon"
-      href="assets/img/music.ico"
-      type="image/x-icon"
-    />
+    <title>Audio-player</title>
+    <link rel="shortcut icon" href="assets/img/music.ico" type="image/x-icon" />
     <link rel="stylesheet" href="style/style.css" />
     <link
       href="https://fonts.googleapis.com/css?family=Montserrat:regular,500,600"
@@ -19,8 +15,11 @@
   <body>
     <main class="main"></main>
     <div class="contacts">
-      <a class="link" href="https://github.com/dangor220" target="blanck">github</a>
-      <p class="link" >dangor220</p>
+      <a class="link" href="https://github.com/dangor220" target="blanck"
+        >github</a
+      >
+      <p class="link">2022</p>
+      <p class="link">dangor220</p>
     </div>
 
     <div class="wrapper">
@@ -36,8 +35,17 @@
           <button class="prev" data-item="prev"></button>
           <button class="play" data-item="play"></button>
           <button class="next" data-item="next"></button>
-        </div>
 
+          <div class="volume__container">
+            <div class="volume-slider">
+              <div class="volume-percentage"></div>
+            </div>
+
+            <div class="volume-button">
+              <div class="volume icono-volumeMedium"></div>
+            </div>
+          </div>
+        </div>
         <div class="linetime">
           <div class="linetime__input">
             <div class="progress"></div>
@@ -49,7 +57,6 @@
         </div>
       </div>
     </div>
-
     <script src="script/index.js"></script>
   </body>
 </html>

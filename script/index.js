@@ -2,22 +2,35 @@ const player = document.querySelector(".time__end");
 const play = document.querySelector(".play");
 const prev = document.querySelector(".prev");
 const next = document.querySelector(".next");
+const timeline = document.querySelector(".linetime__input");
 
 let isPlay = false;
 let playNum = 0;
 
 const arrMusic = [
   [
-    "./assets/audio/beyonce.mp3",
-    "Beyonce",
-    "Don't Hurt Yourself",
-    "./assets/img/lemonade.png",
+    "./assets/audio/Nirvana — Polly.mp3",
+    "Nirvana",
+    "Polly",
+    "./assets/img/kurtjpg.jpg",
+  ],
+  [
+    "./assets/audio/Marvin Gaye - Let's Get It On.mp3",
+    "Marvin Gaye",
+    "Let's Get It On",
+    "./assets/img/mavin.jpg",
   ],
   [
     "./assets/audio/dontstartnow.mp3",
     "Dua Lipa",
     "Don't Start Now",
     "./assets/img/dontstartnow.png",
+  ],
+  [
+    "./assets/audio/beyonce.mp3",
+    "Beyonce",
+    "Don't Hurt Yourself",
+    "./assets/img/lemonade.png",
   ],
 ];
 
@@ -30,8 +43,8 @@ audio.addEventListener(
   },
   false
 );
-let timeToSeek;
-const timeline = document.querySelector(".linetime__input");
+// let timeToSeek;
+
 timeline.addEventListener(
   "click",
   (e) => {
@@ -79,7 +92,7 @@ play.addEventListener("click", start);
 prev.addEventListener("click", prevSound);
 next.addEventListener("click", nextSound);
 
-function start(e, num = playNum) {
+function start(e, num = playNum, time = audio.currentTime) {
   play.classList.add("anim");
   document.querySelector(".wrapper__image").classList.add("animation");
 
@@ -89,7 +102,7 @@ function start(e, num = playNum) {
     play.classList.add("pause");
     isPlay = true;
 
-    playSounds(isPlay, num);
+    playSounds(isPlay, num, time);
   } else {
     play.classList.remove("pause");
     isPlay = false;
@@ -109,6 +122,7 @@ setInterval(() => {
   document.querySelector(".time__start").textContent = getTimeCodeFromNum(
     audio.currentTime
   );
+  endSound();
 }, 500);
 
 function prevSound() {
@@ -124,7 +138,7 @@ function prevSound() {
     playNum = arrMusic.length - 1;
   }
   setTitle();
-  playSounds(isPlay, playNum);
+  playSounds(isPlay, playNum, 0);
 }
 
 function nextSound() {
@@ -139,17 +153,58 @@ function nextSound() {
     playNum = 0;
   }
   setTitle();
-  playSounds(isPlay, playNum);
+  playSounds(isPlay, playNum, 0);
 }
 
-function playSounds(flag, num) {
+function playSounds(flag, num, time) {
   if (flag) {
     audio.src = `${arrMusic[num][0]}`;
-    if (timeToSeek) {
-      audio.currentTime = timeToSeek;
-    }
+    audio.currentTime = time;
+    // if (timeToSeek) {
+    //   audio.currentTime = timeToSeek;
+    // }
     audio.play();
   } else {
     audio.pause();
   }
 }
+
+function endSound() {
+  if (audio.duration === audio.currentTime) {
+    nextSound();
+  }
+}
+
+const volumeSlider = document.querySelector(".volume-slider");
+
+volumeSlider.addEventListener("click", (e) => {
+  if (
+    e.target.classList.contains("active__volume") ||
+    e.target.classList.contains("volume-percentage")
+  ) {
+    const sliderWidth = window.getComputedStyle(volumeSlider).height;
+    const newVolume = e.offsetY / parseInt(sliderWidth);
+    audio.volume = newVolume;
+    document.querySelector(".volume-percentage").style.height =
+      newVolume * 100 + "%";
+  }
+});
+
+const wrapp = document.querySelector(".wrapper__controls");
+
+wrapp.addEventListener("mouseover", (e) => {
+  if (
+    !(
+      e.target.classList.contains("active__volume") ||
+      e.target.classList.contains("volume-percentage")
+    )
+  ) {
+    volumeSlider.classList.remove("active__volume");
+  }
+});
+
+const volume = document.querySelector(".volume");
+
+volume.addEventListener("click", (e) => {
+  volumeSlider.classList.toggle("active__volume");
+});
