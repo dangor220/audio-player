@@ -25,13 +25,7 @@ const arrMusic = [
     "Dua Lipa",
     "Don't Start Now",
     "./assets/img/dontstartnow.png",
-  ],
-  [
-    "./assets/audio/beyonce.mp3",
-    "Beyonce",
-    "Don't Hurt Yourself",
-    "./assets/img/lemonade.png",
-  ],
+  ]
 ];
 
 const audio = new Audio("./assets/audio/beyonce.mp3");
