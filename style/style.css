@@ -143,6 +143,7 @@ body {
   -webkit-filter: invert();
   filter: invert();
   cursor: pointer;
+
   webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 .next {
@@ -380,6 +381,13 @@ body {
   .title {
     color: #fff;
   }
+  .linetime {
+    position: static;
+    top: -54px;
+    left: 0;
+    margin-bottom: 10px;
+    background-color: transparent;
+}
 }
 
 @media (max-height: 732px) {
