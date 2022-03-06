@@ -7,17 +7,30 @@
 body {
   font-family: "Montserrat", sans-serif;
   background-color: #000;
-  position: relative;
 }
-
 .main {
-  height: 100vh;
+  width: 100%;
+  height: 100%;
+}
+.bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -9999;
+}
+.bg__blur {
+  width: 100%;
+  height: 100%;
+  -webkit-filter: blur(6px);
+  filter: blur(6px);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-  filter: blur(6px);
   transition: 0.3s linear;
 }
+
 .contacts {
   position: absolute;
   width: 100%;
@@ -34,44 +47,70 @@ body {
 .link img {
   width: 100%;
 }
-.wrapper {
+.player {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+}
+.player__wrapper {
   display: flex;
   flex-direction: column;
-  position: absolute;
-  top: calc(50vh - 300px);
-  left: calc(50% - 200px);
   border-radius: 10px;
   width: 400px;
-  height: 600px;
   background-color: #000;
   overflow: hidden;
   box-shadow: 0 0 20px #000;
+  margin: 10px;
 }
-.wrapper__image {
-  background-repeat: no-repeat;
-  background-size: 101%;
+.player__image {
+  flex: 0 0 70%;
+  overflow: hidden;
+}
+.player__img {
   background-position: center;
-  height: 60%;
+  background-repeat: no-repeat;
+  background-size: cover;
+
   width: 100%;
+  height: 420px;
 }
-.wrapper__image.animation {
+.player__controls {
+  flex: 0 0 30%;
+}
+.player__img.animation {
+  -webkit-animation-duration: 2000ms;
   animation-duration: 2000ms;
+  -webkit-animation-name: setImage;
   animation-name: setImage;
+  -webkit-animation-iteration-count: infinite;
   animation-iteration-count: infinite;
+}
+@-webkit-keyframes setImage {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 @keyframes setImage {
   0% {
-    background-size: 121%;
+    transform: scale(1);
   }
   50% {
-    background-size: 101%;
+    transform: scale(1.2);
   }
   100% {
-    background-size: 121%;
+    transform: scale(1);
   }
 }
 
-.wrapper__controls {
+.player__controls {
   background: rgb(41, 40, 40);
   background: linear-gradient(
     65deg,
@@ -79,12 +118,12 @@ body {
     rgba(92, 92, 92, 1) 52%,
     rgba(161, 161, 161, 1) 100%
   );
-  height: 40%;
   width: 100%;
 }
 .wrpapper__controls-btn {
   display: flex;
   margin: 20px auto;
+  align-items: center;
   justify-content: center;
 }
 
@@ -96,11 +135,15 @@ body {
   background-size: 100%;
   background-color: transparent;
   background-repeat: no-repeat;
+  border: none;
+  outline: none;
   margin-left: 15px;
-  width: 90px;
-  height: 90px;
+  width: 70px;
+  height: 70px;
+  -webkit-filter: invert();
   filter: invert();
   cursor: pointer;
+  webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 .next {
   background-image: url("../assets/svg/forward.png");
@@ -110,30 +153,48 @@ body {
   margin-left: 0;
 }
 .play.anim {
+  -webkit-animation-duration: 300ms;
   animation-duration: 300ms;
+  -webkit-animation-name: clickBtn;
   animation-name: clickBtn;
 }
 .play.pause {
   background-image: url("../assets/svg/pause.png");
 }
 .next.anim {
+  -webkit-animation-duration: 300ms;
   animation-duration: 300ms;
+  -webkit-animation-name: clickBtn;
   animation-name: clickBtn;
 }
 .prev.anim {
+  -webkit-animation-duration: 300ms;
   animation-duration: 300ms;
+  -webkit-animation-name: clickBtn;
   animation-name: clickBtn;
+}
+
+@-webkit-keyframes clickBtn {
+  0% {
+    background-size: 70px;
+  }
+  50% {
+    background-size: 50px;
+  }
+  100% {
+    background-size: 70px;
+  }
 }
 
 @keyframes clickBtn {
   0% {
-    background-size: 90px;
+    background-size: 70px;
   }
   50% {
-    background-size: 80px;
+    background-size: 50px;
   }
   100% {
-    background-size: 90px;
+    background-size: 70px;
   }
 }
 
@@ -150,10 +211,13 @@ body {
 .linetime {
   width: 100%;
   text-align: center;
+  margin-bottom: 10px;
 }
 .linetime__input {
   width: 70%;
   margin: 15px auto;
+  -webkit-appearance: none;
+  -moz-appearance: none;
   appearance: none;
   height: 5px;
   background: #000000;
@@ -180,6 +244,7 @@ body {
 }
 
 .volume__container {
+  display: flex;
   cursor: pointer;
   position: relative;
   z-index: 2;
@@ -189,7 +254,7 @@ body {
   display: flex;
   width: 70px;
   height: 80px;
-  align-items: flex-end;
+  align-items: center;
   justify-content: flex-end;
 }
 
@@ -204,10 +269,11 @@ body {
   background: white;
   box-shadow: 0 0 20px #000a;
   transition: 0.5s;
+  border-radius: 10px;
 }
 
 .volume-slider.active__volume {
-  height: 90px;
+  height: 80px;
 }
 
 .volume-percentage {
@@ -215,10 +281,109 @@ body {
   width: 100%;
   height: 65%;
   position: relative;
+  border-radius: 10px;
 }
 .icono-volumeMedium {
   width: 70px;
   height: 50px;
   background-image: url("../assets/img/volume.png");
   background-size: cover;
+}
+.footer {
+  position: fixed;
+  width: 100%;
+  z-index: 10;
+  bottom: 0;
+  left: 0;
+}
+.footer__wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 424px) {
+  .play,
+  .next,
+  .prev {
+    width: 60px;
+    height: 60px;
+  }
+
+  @-webkit-keyframes clickBtn {
+    0% {
+      background-size: 60px;
+    }
+    50% {
+      background-size: 40px;
+    }
+    100% {
+      background-size: 60px;
+    }
+  }
+
+  @keyframes clickBtn {
+    0% {
+      background-size: 60px;
+    }
+    50% {
+      background-size: 40px;
+    }
+    100% {
+      background-size: 60px;
+    }
+  }
+}
+
+@media (max-height: 645px) {
+  .player__img {
+    height: 300px;
+  }
+  .wrpapper__controls-btn {
+    margin: 8px auto;
+  }
+}
+
+@media (max-height: 515px) {
+  .player__controls {
+    position: relative;
+  }
+  .linetime {
+    position: absolute;
+    top: -54px;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.63);
+    margin-bottom: 0;
+  }
+}
+@media (max-height: 450px) {
+  .player__wrapper {
+    position: relative;
+    flex-direction: row;
+    width: 100%;
+    margin: 0;
+    border-radius: 0;
+  }
+  .player__image {
+    flex: 0 0 100%;
+  }
+  .player__img {
+    width: 100%;
+    height: 100vh;
+  }
+  .player__controls {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.646);
+  }
+  .title {
+    color: #fff;
+  }
+}
+
+@media (max-height: 732px) {
+  .footer {
+    display: none;
+  }
 }

@@ -25,10 +25,10 @@ const arrMusic = [
     "Dua Lipa",
     "Don't Start Now",
     "./assets/img/dontstartnow.png",
-  ]
+  ],
 ];
 
-const audio = new Audio("./assets/audio/beyonce.mp3");
+const audio = new Audio("./assets/audio/Nirvana — Polly.mp3");
 
 audio.addEventListener(
   "loadeddata",
@@ -37,7 +37,7 @@ audio.addEventListener(
   },
   false
 );
-// let timeToSeek;
+let timeToSeek;
 
 timeline.addEventListener(
   "click",
@@ -49,22 +49,18 @@ timeline.addEventListener(
   false
 );
 
-setTimeout(
-  "document.querySelector('.wrapper__image').classList.remove('animation')",
-  100
-);
 
 function setTitle() {
   document.querySelector(".artist").textContent = arrMusic[playNum][1];
   document.querySelector(".title").textContent = arrMusic[playNum][2];
 
   document.querySelector(
-    ".wrapper__image"
+    ".player__img"
   ).style.backgroundImage = `url(${arrMusic[playNum][3]})`;
-  document.querySelector(".wrapper__image").classList.add("animation");
+ 
 
   document.querySelector(
-    ".main"
+    ".bg__blur"
   ).style.backgroundImage = `url(${arrMusic[playNum][3]})`;
 }
 setTitle();
@@ -76,11 +72,15 @@ function getTimeCodeFromNum(num) {
   const hours = parseInt(minutes / 60);
   minutes -= hours * 60;
 
-  if (hours === 0) return `${minutes}:${String(seconds % 60).padStart(2, 0)}`;
+  if (hours === 0) {
+    return `${minutes}:${String(seconds % 60).padStart(2, 0)}`;
+  } 
   return `${String(hours).padStart(2, 0)}:${minutes}:${String(
     seconds % 60
   ).padStart(2, 0)}`;
 }
+
+
 
 play.addEventListener("click", start);
 prev.addEventListener("click", prevSound);
@@ -88,9 +88,11 @@ next.addEventListener("click", nextSound);
 
 function start(e, num = playNum, time = audio.currentTime) {
   play.classList.add("anim");
-  document.querySelector(".wrapper__image").classList.add("animation");
+  document.querySelector(".player__img").classList.add("animation");
 
-  setTimeout("play.classList.remove('anim')", 300);
+  setTimeout(() => {
+    play.classList.remove('anim');
+  }, 300);
 
   if (!isPlay) {
     play.classList.add("pause");
@@ -101,8 +103,9 @@ function start(e, num = playNum, time = audio.currentTime) {
     play.classList.remove("pause");
     isPlay = false;
 
-    setTimeout(
-      "document.querySelector('.wrapper__image').classList.remove('animation')",
+    setTimeout(() => {
+      document.querySelector('.player__img').classList.remove('animation');
+    },
       100
     );
 
@@ -121,7 +124,10 @@ setInterval(() => {
 
 function prevSound() {
   prev.classList.add("anim");
-  setTimeout("prev.classList.remove('anim')", 300);
+  document.querySelector(".player__img").classList.add("animation");
+  setTimeout(()=> {
+    prev.classList.remove('anim');
+  }, 300);
   play.classList.add("pause");
 
   isPlay = true;
@@ -137,7 +143,10 @@ function prevSound() {
 
 function nextSound() {
   next.classList.add("anim");
-  setTimeout("next.classList.remove('anim')", 300);
+  document.querySelector(".player__img").classList.add("animation");
+  setTimeout(() => {
+    next.classList.remove('anim');
+  }, 300);
   play.classList.add("pause");
 
   isPlay = true;
@@ -184,7 +193,7 @@ volumeSlider.addEventListener("click", (e) => {
   }
 });
 
-const wrapp = document.querySelector(".wrapper__controls");
+const wrapp = document.querySelector(".player__controls");
 
 wrapp.addEventListener("mouseover", (e) => {
   if (
