@@ -1,6 +1,6 @@
 # audioplayer
 
-## https://dangor220.github.io/AudioPlayer/
+## https://dangor220.github.io/audio-player/
 
 ## Used technologies:
 
