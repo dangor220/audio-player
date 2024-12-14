@@ -1,213 +1,159 @@
-const player = document.querySelector(".time__end");
-const play = document.querySelector(".play");
-const prev = document.querySelector(".prev");
-const next = document.querySelector(".next");
-const timeline = document.querySelector(".linetime__input");
+// Селекторы элементов
+const player = document.querySelector('.time__end');
+const play = document.querySelector('.play');
+const prev = document.querySelector('.prev');
+const next = document.querySelector('.next');
+const timeline = document.querySelector('.linetime__input');
+const volumeSlider = document.querySelector('.volume-slider');
+const volume = document.querySelector('.volume');
 
-let isPlay = false;
-let playNum = 0;
+let isPlaying = false;
+let currentTrackIndex = 0;
 
-const arrMusic = [
-  [
-    "./assets/audio/Nirvana — Polly.mp3",
-    "Nirvana",
-    "Polly",
-    "./assets/img/kurtjpg.jpg",
-  ],
-  [
-    "./assets/audio/Marvin Gaye - Let's Get It On.mp3",
-    "Marvin Gaye",
-    "Let's Get It On",
-    "./assets/img/mavin.jpg",
-  ],
-  [
-    "./assets/audio/dontstartnow.mp3",
-    "Dua Lipa",
-    "Don't Start Now",
-    "./assets/img/dontstartnow.png",
-  ],
+const tracks = [
+  {
+    src: './assets/audio/Nirvana — Polly.mp3',
+    artist: 'Nirvana',
+    title: 'Polly',
+    img: './assets/img/kurtjpg.jpg',
+  },
+  {
+    src: "./assets/audio/Marvin Gaye - Let's Get It On.mp3",
+    artist: 'Marvin Gaye',
+    title: "Let's Get It On",
+    img: './assets/img/mavin.jpg',
+  },
+  {
+    src: './assets/audio/dontstartnow.mp3',
+    artist: 'Dua Lipa',
+    title: "Don't Start Now",
+    img: './assets/img/dontstartnow.png',
+  },
 ];
 
-const audio = new Audio("./assets/audio/Nirvana — Polly.mp3");
+const audio = new Audio();
 
-audio.addEventListener(
-  "loadeddata",
-  () => {
-    player.textContent = getTimeCodeFromNum(audio.duration);
-  },
-  false
-);
-let timeToSeek;
-
-timeline.addEventListener(
-  "click",
-  (e) => {
-    const timelineWidth = window.getComputedStyle(timeline).width;
-    timeToSeek = (e.offsetX / parseInt(timelineWidth)) * audio.duration;
-    audio.currentTime = timeToSeek;
-  },
-  false
-);
-
-
-function setTitle() {
-  document.querySelector(".artist").textContent = arrMusic[playNum][1];
-  document.querySelector(".title").textContent = arrMusic[playNum][2];
-
-  document.querySelector(
-    ".player__img"
-  ).style.backgroundImage = `url(${arrMusic[playNum][3]})`;
- 
-
-  document.querySelector(
-    ".bg__blur"
-  ).style.backgroundImage = `url(${arrMusic[playNum][3]})`;
-}
-setTitle();
-
-function getTimeCodeFromNum(num) {
-  let seconds = parseInt(num);
-  let minutes = parseInt(seconds / 60);
-  seconds -= minutes * 60;
-  const hours = parseInt(minutes / 60);
-  minutes -= hours * 60;
-
-  if (hours === 0) {
-    return `${minutes}:${String(seconds % 60).padStart(2, 0)}`;
-  } 
-  return `${String(hours).padStart(2, 0)}:${minutes}:${String(
-    seconds % 60
-  ).padStart(2, 0)}`;
+// Инициализация первого трека
+function loadTrack(index) {
+  const track = tracks[index];
+  audio.src = track.src;
+  document.querySelector('.artist').textContent = track.artist;
+  document.querySelector('.title').textContent = track.title;
+  document.querySelector('.player__img').style.backgroundImage = `url(${track.img})`;
+  document.querySelector('.bg__blur').style.backgroundImage = `url(${track.img})`;
 }
 
+loadTrack(currentTrackIndex);
 
+audio.addEventListener('loadeddata', () => {
+  player.textContent = formatTime(audio.duration);
+});
 
-play.addEventListener("click", start);
-prev.addEventListener("click", prevSound);
-next.addEventListener("click", nextSound);
-
-function start(e, num = playNum, time = audio.currentTime) {
-  play.classList.add("anim");
-  document.querySelector(".player__img").classList.add("animation");
-
-  setTimeout(() => {
-    play.classList.remove('anim');
-  }, 300);
-
-  if (!isPlay) {
-    play.classList.add("pause");
-    isPlay = true;
-
-    playSounds(isPlay, num, time);
-  } else {
-    play.classList.remove("pause");
-    isPlay = false;
-
-    setTimeout(() => {
-      document.querySelector('.player__img').classList.remove('animation');
-    },
-      100
-    );
-
-    playSounds(isPlay);
+audio.addEventListener('timeupdate', () => {
+  const progressBar = document.querySelector('.progress');
+  progressBar.style.width = (audio.currentTime / audio.duration) * 100 + '%';
+  document.querySelector('.time__start').textContent = formatTime(audio.currentTime);
+  if (audio.ended) {
+    nextTrack();
   }
+});
+
+function formatTime(seconds) {
+  const minutes = Math.floor(seconds / 60);
+  seconds = Math.floor(seconds % 60);
+  return `${minutes}:${seconds.toString().padStart(2, '0')}`;
 }
 
-setInterval(() => {
-  const progressBar = document.querySelector(".progress");
-  progressBar.style.width = (audio.currentTime / audio.duration) * 100 + "%";
-  document.querySelector(".time__start").textContent = getTimeCodeFromNum(
-    audio.currentTime
-  );
-  endSound();
-}, 500);
-
-function prevSound() {
-  prev.classList.add("anim");
-  document.querySelector(".player__img").classList.add("animation");
-  setTimeout(()=> {
-    prev.classList.remove('anim');
-  }, 300);
-  play.classList.add("pause");
-
-  isPlay = true;
-  timeToSeek = 0;
-
-  playNum -= 1;
-  if (playNum < 0) {
-    playNum = arrMusic.length - 1;
-  }
-  setTitle();
-  playSounds(isPlay, playNum, 0);
-}
-
-function nextSound() {
-  next.classList.add("anim");
-  document.querySelector(".player__img").classList.add("animation");
-  setTimeout(() => {
-    next.classList.remove('anim');
-  }, 300);
-  play.classList.add("pause");
-
-  isPlay = true;
-  timeToSeek = 0;
-  playNum += 1;
-  if (playNum > arrMusic.length - 1) {
-    playNum = 0;
-  }
-  setTitle();
-  playSounds(isPlay, playNum, 0);
-}
-
-function playSounds(flag, num, time) {
-  if (flag) {
-    audio.src = `${arrMusic[num][0]}`;
-    audio.currentTime = time;
-    // if (timeToSeek) {
-    //   audio.currentTime = timeToSeek;
-    // }
-    audio.play();
-  } else {
+function playPause() {
+  const playImage = play.querySelector('img');
+  if (isPlaying) {
     audio.pause();
+    playImage.src = '../assets/img/controls/play.png';
+    document.querySelector('.player__img').classList.remove('animation');
+  } else {
+    audio.play();
+    playImage.src = '../assets/img/controls/pause.png';
+    document.querySelector('.player__img').classList.add('animation');
   }
+  isPlaying = !isPlaying;
 }
 
-function endSound() {
-  if (audio.duration === audio.currentTime) {
-    nextSound();
-  }
+function prevTrack() {
+  currentTrackIndex = (currentTrackIndex - 1 + tracks.length) % tracks.length;
+  loadTrack(currentTrackIndex);
+  audio.currentTime = 0;
+  if (isPlaying) audio.play();
 }
 
-const volumeSlider = document.querySelector(".volume-slider");
+function nextTrack() {
+  currentTrackIndex = (currentTrackIndex + 1) % tracks.length;
+  loadTrack(currentTrackIndex);
+  audio.currentTime = 0;
+  if (isPlaying) audio.play();
+}
 
-volumeSlider.addEventListener("click", (e) => {
+function handleTimelineClick(e) {
+  const timelineWidth = parseInt(window.getComputedStyle(timeline).width);
+  const clickPosition = e.offsetX / timelineWidth;
+  audio.currentTime = clickPosition * audio.duration;
+}
+
+function handleVolumeChange(e) {
+  const sliderHeight = parseInt(window.getComputedStyle(volumeSlider).height);
+  const offsetY = e.touches
+    ? e.touches[0].clientY - volumeSlider.getBoundingClientRect().top
+    : e.offsetY;
+  let newVolume = e.touches ? 1 - offsetY / sliderHeight : offsetY / sliderHeight;
+
+  audio.volume = Math.min(Math.max(newVolume, 0), 1);
+  document.querySelector('.volume-percentage').style.height = `${audio.volume * 100}%`;
+}
+
+play.addEventListener('click', playPause);
+prev.addEventListener('click', prevTrack);
+next.addEventListener('click', nextTrack);
+timeline.addEventListener('click', handleTimelineClick);
+let isChanged = false;
+
+volumeSlider.addEventListener('mousedown', (e) => {
   if (
-    e.target.classList.contains("active__volume") ||
-    e.target.classList.contains("volume-percentage")
+    e.target.classList.contains('active__volume') ||
+    e.target.classList.contains('volume-percentage')
   ) {
-    const sliderWidth = window.getComputedStyle(volumeSlider).height;
-    const newVolume = e.offsetY / parseInt(sliderWidth);
-    audio.volume = newVolume;
-    document.querySelector(".volume-percentage").style.height =
-      newVolume * 100 + "%";
+    e.preventDefault();
+    handleVolumeChange(e);
+    isChanged = true;
+    volumeSlider.addEventListener('mousemove', handleVolumeChange);
+  }
+});
+document.addEventListener('mouseup', (e) => {
+  if (isChanged) {
+    volumeSlider.removeEventListener('mousemove', handleVolumeChange);
+    volumeSlider.classList.remove('active__volume');
+    isChanged = false;
   }
 });
 
-const wrapp = document.querySelector(".player__controls");
-
-wrapp.addEventListener("mouseover", (e) => {
+volumeSlider.addEventListener('touchstart', (e) => {
   if (
-    !(
-      e.target.classList.contains("active__volume") ||
-      e.target.classList.contains("volume-percentage")
-    )
+    e.target.classList.contains('active__volume') ||
+    e.target.classList.contains('volume-percentage')
   ) {
-    volumeSlider.classList.remove("active__volume");
+    handleVolumeChange(e);
+    volumeSlider.addEventListener('touchmove', handleVolumeChange);
   }
 });
 
-const volume = document.querySelector(".volume");
+document.addEventListener('touchend', () => {
+  volumeSlider.removeEventListener('touchmove', handleVolumeChange);
+  volumeSlider.classList.remove('active__volume');
+});
 
-volume.addEventListener("click", (e) => {
-  volumeSlider.classList.toggle("active__volume");
+volume.addEventListener('click', (e) => {
+  const slider = document.querySelector('.volume-slider');
+  if (slider.classList.contains('active__volume')) {
+    slider.classList.remove('active__volume');
+  } else {
+    slider.classList.add('active__volume');
+  }
 });

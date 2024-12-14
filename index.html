@@ -9,8 +9,7 @@
     <link rel="stylesheet" href="style/style.css" />
     <link
       href="https://fonts.googleapis.com/css?family=Montserrat:regular,500,600"
-      rel="stylesheet"
-    />
+      rel="stylesheet" />
   </head>
   <body>
     <main class="main">
@@ -29,28 +28,37 @@
               <span class="title">NaN</span>
             </div>
 
-            <div class="wrpapper__controls-btn">
-              <button class="prev" data-item="prev"></button>
-              <button class="play" data-item="play"></button>
-              <button class="next" data-item="next"></button>
-
+            <div class="wrapper__controls-btn">
+              <button class="control-btn prev" data-item="prev">
+                <img class="control" src="./assets/img/controls/prev.png" alt="prev" />
+              </button>
+              <button class="control-btn play" data-item="play">
+                <img class="control" src="./assets/img/controls/play.png" alt="play" />
+              </button>
+              <button class="control-btn next" data-item="next">
+                <img class="control" src="./assets/img/controls/next.png" alt="next" />
+              </button>
+            </div>
+            <div class="info">
+              <div class="linetime">
+                <div class="linetime__input">
+                  <div class="progress"></div>
+                </div>
+                <div class="linetime__minute">
+                  <div class="time__start">0:00</div>
+                  <div class="time__end">0:00</div>
+                </div>
+              </div>
               <div class="volume__container">
                 <div class="volume-slider">
                   <div class="volume-percentage"></div>
                 </div>
 
                 <div class="volume-button">
-                  <div class="volume icono-volumeMedium"></div>
+                  <button class="control-btn volume icono-volumeMedium">
+                    <img class="control" src="./assets/img/controls/volume.png" alt="volume" />
+                  </button>
                 </div>
-              </div>
-            </div>
-            <div class="linetime">
-              <div class="linetime__input">
-                <div class="progress"></div>
-              </div>
-              <div class="linetime__minute">
-                <div class="time__start">0:00</div>
-                <div class="time__end">0:00</div>
               </div>
             </div>
           </div>
@@ -60,11 +68,7 @@
 
     <footer class="footer">
       <div class="footer__wrapper">
-        <a class="link" href="https://github.com/dangor220" target="blanck"
-          >github</a
-        >
-        <p class="link">2022</p>
-        <p class="link">dangor220</p>
+        <a class="link" href="https://github.com/dangor220" target="_blank">dangor</a>
       </div>
     </footer>
 
