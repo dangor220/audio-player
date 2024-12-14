@@ -68,11 +68,11 @@ function playPause() {
   const playImage = play.querySelector('img');
   if (isPlaying) {
     audio.pause();
-    playImage.src = '../assets/img/controls/play.png';
+    playImage.src = './assets/img/controls/play.png';
     document.querySelector('.player__img').classList.remove('animation');
   } else {
     audio.play();
-    playImage.src = '../assets/img/controls/pause.png';
+    playImage.src = './assets/img/controls/pause.png';
     document.querySelector('.player__img').classList.add('animation');
   }
   isPlaying = !isPlaying;
