@@ -5,6 +5,7 @@ const next = document.querySelector('.next');
 const timeline = document.querySelector('.linetime__input');
 const volumeSlider = document.querySelector('.volume-slider');
 const volume = document.querySelector('.volume');
+const info = document.querySelector('.info');
 
 let isPlaying = false;
 let currentTrackIndex = 0;
@@ -38,6 +39,7 @@ const isIOS =
 
 if (isIOS) {
   volume.style.display = 'none';
+  info.classList.add('hidden');
 }
 
 function loadTrack(index) {
@@ -98,11 +100,55 @@ function nextTrack() {
   if (isPlaying) audio.play();
 }
 
-function handleTimelineClick(e) {
+let isTimelineChanged = false;
+
+function handleTimelineMouseChange(e) {
   const timelineWidth = parseInt(window.getComputedStyle(timeline).width);
-  const clickPosition = e.offsetX / timelineWidth;
-  audio.currentTime = clickPosition * audio.duration;
+  const timelineRect = timeline.getBoundingClientRect();
+
+  const offsetX = Math.min(Math.max(e.clientX - timelineRect.left, 0), timelineWidth);
+
+  const newVolume = offsetX / timelineWidth;
+
+  audio.currentTime = newVolume * audio.duration;
 }
+
+timeline.addEventListener('mousedown', (e) => {
+  e.preventDefault();
+  handleTimelineMouseChange(e);
+  isTimelineChanged = true;
+  document.addEventListener('mousemove', handleTimelineMouseChange);
+});
+document.addEventListener('mouseup', () => {
+  if (isTimelineChanged) {
+    document.removeEventListener('mousemove', handleTimelineMouseChange);
+    isTimelineChanged = false;
+  }
+});
+
+function handleTimelineTouchMove(e) {
+  const timelineWidth = parseInt(window.getComputedStyle(timeline).width);
+  const timelineRect = timeline.getBoundingClientRect();
+
+  const touchX = e.touches[0].clientX;
+  const offsetX = Math.min(Math.max(touchX - timelineRect.left, 0), timelineWidth);
+  const newVolume = offsetX / timelineWidth;
+
+  audio.currentTime = newVolume * audio.duration;
+}
+
+timeline.addEventListener('touchstart', (e) => {
+  handleTimelineTouchMove(e);
+  isTimelineChanged = true;
+  timeline.addEventListener('touchmove', handleTimelineTouchMove);
+});
+
+document.addEventListener('touchend', () => {
+  if (isTimelineChanged) {
+    timeline.removeEventListener('touchmove', handleTimelineTouchMove);
+    isTimelineChanged = false;
+  }
+});
 
 function handleVolumeMouseMove(e) {
   const sliderHeight = parseInt(window.getComputedStyle(volumeSlider).height);
@@ -119,7 +165,7 @@ function handleVolumeMouseMove(e) {
 play.addEventListener('click', playPause);
 prev.addEventListener('click', prevTrack);
 next.addEventListener('click', nextTrack);
-timeline.addEventListener('click', handleTimelineClick);
+
 let isChanged = false;
 
 volumeSlider.addEventListener('mousedown', (e) => {
@@ -133,7 +179,7 @@ volumeSlider.addEventListener('mousedown', (e) => {
     document.addEventListener('mousemove', handleVolumeMouseMove);
   }
 });
-document.addEventListener('mouseup', (e) => {
+document.addEventListener('mouseup', () => {
   if (isChanged) {
     document.removeEventListener('mousemove', handleVolumeMouseMove);
     volumeSlider.classList.remove('active__volume');

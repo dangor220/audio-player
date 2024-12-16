@@ -34,12 +34,8 @@ body {
   align-items: center;
 }
 .link {
-  width: 100px;
   color: #fff;
   text-decoration: none;
-}
-.link img {
-  width: 100%;
 }
 .player {
   display: flex;
@@ -159,6 +155,9 @@ body {
   gap: 20px;
   padding: 15px 25px;
 }
+.hidden {
+  flex-direction: column;
+}
 .volume__container {
   position: relative;
   z-index: 2;
@@ -224,19 +223,8 @@ body {
     margin: 8px auto;
   }
 }
-@media (max-height: 515px) {
-  .player__controls {
-    position: relative;
-  }
-  .linetime {
-    position: absolute;
-    top: -54px;
-    left: 0;
-    margin-bottom: 0;
-    background-color: rgba(0, 0, 0, 0.63);
-  }
-}
-@media (max-height: 450px) {
+
+@media (max-height: 540px) {
   .player__wrapper {
     position: relative;
     flex-direction: row;
