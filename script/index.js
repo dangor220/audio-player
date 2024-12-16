@@ -104,13 +104,13 @@ function handleTimelineClick(e) {
   audio.currentTime = clickPosition * audio.duration;
 }
 
-function handleVolumeChange(e) {
+function handleVolumeMouseMove(e) {
   const sliderHeight = parseInt(window.getComputedStyle(volumeSlider).height);
-  const offsetY = e.touches
-    ? e.touches[0].clientY - volumeSlider.getBoundingClientRect().top
-    : e.offsetY;
+  const sliderRect = volumeSlider.getBoundingClientRect();
 
-  let newVolume = e.touches ? 1 - offsetY / sliderHeight : offsetY / sliderHeight;
+  const offsetY = Math.min(Math.max(e.clientY - sliderRect.top, 0), sliderHeight);
+
+  const newVolume = 1 - offsetY / sliderHeight;
 
   audio.volume = Math.min(Math.max(newVolume, 0), 1);
   document.querySelector('.volume-percentage').style.height = `${audio.volume * 100}%`;
@@ -128,18 +128,30 @@ volumeSlider.addEventListener('mousedown', (e) => {
     e.target.classList.contains('volume-percentage')
   ) {
     e.preventDefault();
-    handleVolumeChange(e);
+    handleVolumeMouseMove(e);
     isChanged = true;
-    volumeSlider.addEventListener('mousemove', handleVolumeChange);
+    document.addEventListener('mousemove', handleVolumeMouseMove);
   }
 });
 document.addEventListener('mouseup', (e) => {
   if (isChanged) {
-    volumeSlider.removeEventListener('mousemove', handleVolumeChange);
+    document.removeEventListener('mousemove', handleVolumeMouseMove);
     volumeSlider.classList.remove('active__volume');
     isChanged = false;
   }
 });
+
+function handleVolumeTouchMove(e) {
+  const sliderHeight = parseInt(window.getComputedStyle(volumeSlider).height);
+  const sliderRect = volumeSlider.getBoundingClientRect();
+
+  const touchY = e.touches[0].clientY;
+  const offsetY = Math.min(Math.max(touchY - sliderRect.top, 0), sliderHeight);
+  const newVolume = 1 - offsetY / sliderHeight;
+
+  audio.volume = Math.min(Math.max(newVolume, 0), 1);
+  document.querySelector('.volume-percentage').style.height = `${audio.volume * 100}%`;
+}
 
 volumeSlider.addEventListener('touchstart', (e) => {
   if (
@@ -147,14 +159,18 @@ volumeSlider.addEventListener('touchstart', (e) => {
     e.target.classList.contains('volume-percentage')
   ) {
     e.preventDefault();
-    handleVolumeChange(e);
-    volumeSlider.addEventListener('touchmove', handleVolumeChange);
+    handleVolumeTouchMove(e);
+    isChanged = true;
+    volumeSlider.addEventListener('touchmove', handleVolumeTouchMove);
   }
 });
 
 document.addEventListener('touchend', () => {
-  volumeSlider.removeEventListener('touchmove', handleVolumeChange);
-  volumeSlider.classList.remove('active__volume');
+  if (isChanged) {
+    volumeSlider.removeEventListener('touchmove', handleVolumeTouchMove);
+    volumeSlider.classList.remove('active__volume');
+    isChanged = false;
+  }
 });
 
 volume.addEventListener('click', () => {
