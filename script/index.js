@@ -1,4 +1,3 @@
-// Селекторы элементов
 const player = document.querySelector('.time__end');
 const play = document.querySelector('.play');
 const prev = document.querySelector('.prev');
@@ -33,7 +32,14 @@ const tracks = [
 
 const audio = new Audio();
 
-// Инициализация первого трека
+const isIOS =
+  /iPad|iPhone|iPod/.test(navigator.platform) ||
+  (navigator.userAgent.includes('Mac') && 'ontouchend' in document);
+
+if (isIOS) {
+  volume.style.display = 'none';
+}
+
 function loadTrack(index) {
   const track = tracks[index];
   audio.src = track.src;
@@ -103,6 +109,7 @@ function handleVolumeChange(e) {
   const offsetY = e.touches
     ? e.touches[0].clientY - volumeSlider.getBoundingClientRect().top
     : e.offsetY;
+
   let newVolume = e.touches ? 1 - offsetY / sliderHeight : offsetY / sliderHeight;
 
   audio.volume = Math.min(Math.max(newVolume, 0), 1);
@@ -139,6 +146,7 @@ volumeSlider.addEventListener('touchstart', (e) => {
     e.target.classList.contains('active__volume') ||
     e.target.classList.contains('volume-percentage')
   ) {
+    e.preventDefault();
     handleVolumeChange(e);
     volumeSlider.addEventListener('touchmove', handleVolumeChange);
   }
@@ -149,7 +157,7 @@ document.addEventListener('touchend', () => {
   volumeSlider.classList.remove('active__volume');
 });
 
-volume.addEventListener('click', (e) => {
+volume.addEventListener('click', () => {
   const slider = document.querySelector('.volume-slider');
   if (slider.classList.contains('active__volume')) {
     slider.classList.remove('active__volume');
